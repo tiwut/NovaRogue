@@ -1,34 +1,331 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
+    <script>
+        if (location.protocol !== 'https:') {
+            location.replace('https:' + location.href.substring(location.protocol.length));
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-key="siteTitle">Website Suche</title>
-    <link rel="stylesheet" href="style_search.css">
+    <title>NovaRogue - Coming Soon</title>
+    <link rel="icon" href="icon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --dark-blue: #1a1d24;
+            --orange: #e8772e;
+            --light-skull: #e6d8c4;
+            --font-main: 'Teko', sans-serif;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: var(--dark-blue);
+            font-family: var(--font-main);
+            color: var(--orange);
+        }
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiGAAAAA1BMVEX///+nxBvIAAAAIElEQVR42mP4BwYY/wMDBn8GBgb/DAwM/wMMDP8DDAwA124A/2nsc9EAAAAASUVORK5CYII=');
+            opacity: 0.08;
+            z-index: 10;
+            pointer-events: none;
+            animation: grain 8s steps(10) infinite;
+        }
+        @keyframes grain {
+          0%, 100% { transform: translate(0, 0); }
+          10% { transform: translate(-5%, -10%); }
+          20% { transform: translate(-15%, 5%); }
+          30% { transform: translate(7%, -25%); }
+          40% { transform: translate(-5%, 25%); }
+          50% { transform: translate(-15%, 10%); }
+          60% { transform: translate(15%, 0%); }
+          70% { transform: translate(0%, 15%); }
+          80% { transform: translate(3%, 35%); }
+          90% { transform: translate(-10%, 10%); }
+        }
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .video-background::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(26, 29, 36, 0.6);
+            z-index: -1;
+        }
+        #main-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            padding: 20px;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+            animation-delay: 0.5s;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        .logo-container {
+            animation: float 6s ease-in-out infinite;
+        }
+        .logo {
+            max-width: 250px;
+            width: 100%;
+            height: auto;
+            margin-bottom: -20px;
+        }
+        .game-title {
+            font-size: 8rem;
+            letter-spacing: 0.5rem;
+            text-shadow: 0 0 15px rgba(232, 119, 46, 0.4);
+        }
+        .coming-soon-text {
+            font-size: 2.5rem;
+            letter-spacing: 0.8rem;
+            margin-top: -1.5rem;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 15px;
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            background: var(--dark-blue);
+            padding: 30px 40px;
+            border: 2px solid var(--orange);
+            border-radius: 8px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 0 25px rgba(232, 119, 46, 0.3);
+        }
+        .modal-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        .modal-content p {
+            font-size: 1.4rem;
+            color: var(--light-skull);
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        .checkbox-container {
+            margin: 25px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        #age-confirm-checkbox {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--orange);
+        }
+        .checkbox-container label {
+            font-size: 1.2rem;
+            color: var(--light-skull);
+        }
+        #accept-button {
+            font-family: var(--font-main);
+            background: var(--orange);
+            color: var(--dark-blue);
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+            font-weight: 700;
+        }
+        #accept-button:disabled {
+            background: #555;
+            color: #999;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        #accept-button:not(:disabled):hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--orange);
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        @media (max-width: 768px) {
+            .logo {
+                max-width: 180px;
+            }
+            .game-title {
+                font-size: 5rem;
+                letter-spacing: 0.3rem;
+            }
+            .coming-soon-text {
+                font-size: 1.5rem;
+                letter-spacing: 0.5rem;
+                margin-top: -1rem;
+            }
+            .modal-content h2 {
+                font-size: 2rem;
+            }
+            .modal-content p {
+                font-size: 1.2rem;
+            }
+            .checkbox-container label {
+                font-size: 1rem;
+            }
+            #accept-button {
+                padding: 10px 20px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div id="cursor-dot"></div>
-    <div id="cursor-circle"></div>
 
-    <a href="https://tiwut.de/" rel="noopener noreferrer" class="main-page-link" data-key="mainPage">Main Page</a>
-    
-    <div id="lang-switcher">
-        <button data-lang="de">DE</button>
-        <button data-lang="en">EN</button>
-        <button data-lang="es">ES</button>
+    <div class="video-background">
+        <video autoplay muted loop playsinline>
+            <source src="main.webm" type="video/webm">
+            <source src="main.mp4" type="video/mp4">
+        </video>
     </div>
 
-    <main class="main-container">
-        <div class="search-container">
-            <h1 data-key="title">Durchsuche die Website</h1>
-            <div class="input-wrapper">
-                <input type="text" id="searchInput" data-key-placeholder="placeholder">
+    <div id="age-gate-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 data-translate="modalTitle">Important Notice</h2>
+            <p data-translate="modalText1">This website is intended for private and family purposes only!!!</p>
+            <p data-translate="modalText2">By accepting, you confirm this.</p>
+            <div class="checkbox-container">
+                <input type="checkbox" id="age-confirm-checkbox">
+                <label for="age-confirm-checkbox" data-translate="modalCheckbox">I confirm that I am at least 16 years old.</label>
             </div>
-            <div id="results">
-            </div>
+            <button id="accept-button" data-translate="modalButton" disabled>Accept and Continue</button>
         </div>
+    </div>
+
+    <main id="main-content">
+        <div class="logo-container">
+            <img src="novarogue-logo.png" alt="NovaRogue Logo" class="logo">
+        </div>
+        <h1 class="game-title">NOVROGUE</h1>
+        <p class="coming-soon-text" data-translate="comingSoon">COMING SOON</p>
     </main>
 
-    <script src="search.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const translations = {
+                en: {
+                    modalTitle: "Important Notice",
+                    modalText1: "This website is intended for private and family purposes only!!!",
+                    modalText2: "By accepting, you confirm this.",
+                    modalCheckbox: "I confirm that I am at least 16 years old.",
+                    modalButton: "Accept and Continue",
+                    comingSoon: "COMING SOON"
+                },
+                de: {
+                    modalTitle: "Wichtiger Hinweis",
+                    modalText1: "Diese Webseite ist ausschließlich für private und familiäre Zwecke bestimmt!!!",
+                    modalText2: "Mit der Annahme bestätigen Sie dies.",
+                    modalCheckbox: "Ich bestätige, dass ich mindestens 16 Jahre alt bin.",
+                    modalButton: "Akzeptieren und Fortfahren",
+                    comingSoon: "BALD VERFÜGBAR"
+                },
+                es: {
+                    modalTitle: "Aviso Importante",
+                    modalText1: "¡¡¡Este sitio web está destinado únicamente para fines privados y familiares!!!",
+                    modalText2: "Al aceptar, usted confirma esto.",
+                    modalCheckbox: "Confirmo que tengo al menos 16 años.",
+                    modalButton: "Aceptar y Continuar",
+                    comingSoon: "PRÓXIMAMENTE"
+                }
+            };
+
+            const setLanguage = (lang) => {
+                const selectedLang = translations[lang] ? lang : 'en';
+                document.documentElement.lang = selectedLang;
+                document.querySelectorAll('[data-translate]').forEach(element => {
+                    const key = element.dataset.translate;
+                    element.innerHTML = translations[selectedLang][key];
+                });
+            };
+
+            const userLang = navigator.language.split('-')[0];
+            setLanguage(userLang);
+
+            const modal = document.getElementById('age-gate-modal');
+            const mainContent = document.getElementById('main-content');
+            const checkbox = document.getElementById('age-confirm-checkbox');
+            const acceptButton = document.getElementById('accept-button');
+            
+            mainContent.style.opacity = '0';
+
+            if (localStorage.getItem('novaRogueAgeGateAccepted') === 'true') {
+                modal.style.display = 'none';
+                mainContent.style.opacity = '1';
+            } else {
+                modal.style.display = 'flex';
+            }
+
+            checkbox.addEventListener('change', () => {
+                acceptButton.disabled = !checkbox.checked;
+            });
+
+            acceptButton.addEventListener('click', () => {
+                if (!checkbox.checked) return;
+                
+                modal.style.opacity = '0';
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+
+                localStorage.setItem('novaRogueAgeGateAccepted', 'true');
+                mainContent.style.opacity = '1';
+            });
+        });
+    </script>
 </body>
 </html>

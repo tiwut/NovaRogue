@@ -1,2 +1,0 @@
-# NovaRogue
-GAME NovaRogue
